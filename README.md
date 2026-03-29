@@ -1,16 +1,19 @@
-# icitizen_app
+# Smart Apartment Management App
 
-A new Flutter project.
+## Description
+A mobile application for managing residents in an apartment building.
 
-## Getting Started
+## Features
+- Manage resident information
+- Search and update resident data
+- Chatbot support for user assistance
 
-This project is a starting point for a Flutter application.
+## Tech Stack
+- Flutter
+- Dart
 
-A few resources to get you started if this is your first Flutter project:
+## Demo
+(Add screenshots or video here if available)
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Author
+Ho Ngoc Khoi
