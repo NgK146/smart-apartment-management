@@ -1,0 +1,6 @@
+@ICitizen_HostAddress = http://localhost:5090
+
+GET {{ICitizen_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

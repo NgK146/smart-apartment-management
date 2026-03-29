@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Deep Link - iCitizen</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            text-align: center;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .test-link {
+            display: inline-block;
+            padding: 20px 40px;
+            margin: 20px 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 18px;
+            font-weight: bold;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+            transition: transform 0.2s;
+        }
+        .test-link:hover {
+            transform: scale(1.05);
+        }
+        .test-link:active {
+            transform: scale(0.95);
+        }
+        .info {
+            margin: 30px 0;
+            padding: 20px;
+            background: #f0f4ff;
+            border-radius: 10px;
+            text-align: left;
+        }
+        .info h3 {
+            color: #667eea;
+            margin-top: 0;
+        }
+        .info ul {
+            line-height: 1.8;
+        }
+        .invoice-id {
+            font-family: monospace;
+            background: #e0e7ff;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Test Deep Link</h1>
+        <p style="color: #666; font-size: 16px;">Click vào nút bên dưới để test deep link payment success</p>
+        
+        <a href="icitizen://payment/success?orderCode=TEST123&invoiceId=5cc36e91-b1f1-4542-908d-4e982d262a14" class="test-link">
+            🚀 Test Payment Success
+        </a>
+        
+        <div class="info">
+            <h3>📋 Kết Quả Mong Đợi:</h3>
+            <ul>
+                <li>✅ App iCitizen tự động mở</li>
+                <li>✅ Chuyển sang tab "Hóa đơn"</li>
+                <li>✅ Toast hiện: "Thanh toán thành công! Mã: TEST123"</li>
+                <li>✅ Chi tiết hóa đơn tự động mở</li>
+            </ul>
+            
+            <p><strong>Invoice ID:</strong><br>
+            <span class="invoice-id">5cc36e91-b1f1-4542-908d-4e982d262a14</span></p>
+        </div>
+        
+        <div style="margin-top: 30px;">
+            <a href="icitizen://payment/failed?orderCode=FAIL999" class="test-link" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+                ❌ Test Payment Failed
+            </a>
+        </div>
+        
+        <div style="margin-top: 20px;">
+            <a href="icitizen://payment/cancelled?orderCode=CANCEL888" class="test-link" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);">
+                ⚠️ Test Payment Cancelled
+            </a>
+        </div>
+    </div>
+</body>
+</html>

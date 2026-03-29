@@ -1,0 +1,22 @@
+// Model cho Giỏ hàng (local state, không lưu trên server)
+import 'product_model.dart';
+
+class CartItem {
+  final Product product;
+  int quantity;
+
+  CartItem({
+    required this.product,
+    this.quantity = 1,
+  });
+
+  double get totalPrice => product.price * quantity;
+
+  CartItem copyWith({Product? product, int? quantity}) {
+    return CartItem(
+      product: product ?? this.product,
+      quantity: quantity ?? this.quantity,
+    );
+  }
+}
+

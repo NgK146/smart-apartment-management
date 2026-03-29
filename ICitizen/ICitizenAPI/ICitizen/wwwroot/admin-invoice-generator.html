@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tạo Hóa Đơn Tiện Ích - Admin Panel</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            color: white;
+            margin-bottom: 30px;
+        }
+
+        .header h1 {
+            font-size: 32px;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .header p {
+            font-size: 16px;
+            opacity: 0.9;
+        }
+
+        .card {
+            background: white;
+            border-radius: 16px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+        }
+
+        .card h2 {
+            font-size: 20px;
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #667eea;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            color: #555;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input,
+        .form-group select {
+            width: 100%;
+            padding: 12px 16px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .form-group input:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+        }
+
+        .meter-section {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .meter-section h3 {
+            font-size: 18px;
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .calculated {
+            background: #e8f5e9;
+            border: 2px solid #4caf50;
+            font-weight: 600;
+            color: #2e7d32;
+        }
+
+        .summary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .summary-row:last-child {
+            border-bottom: none;
+            font-size: 24px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 10px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-primary:active {
+            transform: translateY(0);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 16px 24px;
+            border-radius: 12px;
+            color: white;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            opacity: 0;
+            transform: translateX(400px);
+            transition: all 0.3s;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            opacity: 1;
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: #4caf50;
+        }
+
+        .notification.error {
+            background: #f44336;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: white;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        .info-box {
+            background: #e3f2fd;
+            border-left: 4px solid #2196f3;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 14px;
+            color: #1565c0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏢 Tạo Hóa Đơn Tiện Ích</h1>
+            <p>Hệ thống quản lý hóa đơn điện nước chung cư</p>
+        </div>
+
+        <!-- Login Section -->
+        <div class="card" id="loginCard">
+            <h2>Đăng Nhập Admin</h2>
+            <div class="form-group">
+                <label>Username</label>
+                <input type="text" id="loginUsername" placeholder="Nhập username">
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <input type="password" id="loginPassword" placeholder="Nhập password">
+            </div>
+            <button class="btn btn-primary" onclick="login()">Đăng Nhập</button>
+        </div>
+
+        <!-- Main Form (Hidden until logged in) -->
+        <div id="mainForm" style="display: none;">
+            <!-- Period Selection -->
+            <div class="card">
+                <h2>📅 Kỳ Hóa Đơn</h2>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Tháng</label>
+                        <select id="month">
+                            <option value="1">Tháng 1</option>
+                            <option value="2">Tháng 2</option>
+                            <option value="3">Tháng 3</option>
+                            <option value="4">Tháng 4</option>
+                            <option value="5">Tháng 5</option>
+                            <option value="6">Tháng 6</option>
+                            <option value="7">Tháng 7</option>
+                            <option value="8">Tháng 8</option>
+                            <option value="9">Tháng 9</option>
+                            <option value="10">Tháng 10</option>
+                            <option value="11">Tháng 11</option>
+                            <option value="12">Tháng 12</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Năm</label>
+                        <input type="number" id="year" value="2025" min="2024" max="2030">
+                    </div>
+                    <div class="form-group">
+                        <label>Hạn thanh toán</label>
+                        <input type="date" id="dueDate">
+                    </div>
+                </div>
+            </div>
+
+            <!-- Apartment Selection -->
+            <div class="card">
+                <h2>🏠 Chọn Căn Hộ</h2>
+                <div class="form-group">
+                    <label>Căn hộ</label>
+                    <select id="apartment" onchange="loadApartmentInfo()">
+                        <option value="">-- Chọn căn hộ --</option>
+                    </select>
+                </div>
+                <div id="apartmentInfo" class="info-box" style="display: none;"></div>
+            </div>
+
+            <!-- Electricity -->
+            <div class="card">
+                <h2>⚡ Tiền Điện</h2>
+                <div class="meter-section">
+                    <h3>Chỉ số điện</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Chỉ số cũ (kWh)</label>
+                            <input type="number" id="elecOld" value="0" oninput="calculateElec()">
+                        </div>
+                        <div class="form-group">
+                            <label>Chỉ số mới (kWh)</label>
+                            <input type="number" id="elecNew" value="0" oninput="calculateElec()">
+                        </div>
+                        <div class="form-group">
+                            <label>Sử dụng (kWh)</label>
+                            <input type="number" id="elecUsage" class="calculated" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Đơn giá TB (VNĐ/kWh)</label>
+                            <input type="number" id="elecPrice" value="2200" oninput="calculateElec()">
+                        </div>
+                        <div class="form-group">
+                            <label>Thành tiền (VNĐ)</label>
+                            <input type="text" id="elecAmount" class="calculated" readonly>
+                        </div>
+                    </div>
+                </div>
+                <div class="info-box">
+                    💡 <strong>Biểu giá điện bậc thang 2025:</strong> Bậc 1: 1,984đ | Bậc 2: 2,050đ | Bậc 3: 2,380đ |
+                    Bậc 4: 2,998đ (chưa VAT)
+                </div>
+            </div>
+
+            <!-- Water -->
+            <div class="card">
+                <h2>💧 Tiền Nước</h2>
+                <div class="meter-section">
+                    <h3>Chỉ số nước</h3>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Chỉ số cũ (m³)</label>
+                            <input type="number" id="waterOld" value="0" oninput="calculateWater()">
+                        </div>
+                        <div class="form-group">
+                            <label>Chỉ số mới (m³)</label>
+                            <input type="number" id="waterNew" value="0" oninput="calculateWater()">
+                        </div>
+                        <div class="form-group">
+                            <label>Sử dụng (m³)</label>
+                            <input type="number" id="waterUsage" class="calculated" readonly>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Đơn giá (VNĐ/m³)</label>
+                            <input type="number" id="waterPrice" value="15000" oninput="calculateWater()">
+                        </div>
+                        <div class="form-group">
+                            <label>Thành tiền (VNĐ)</label>
+                            <input type="text" id="waterAmount" class="calculated" readonly>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Management Fee -->
+            <div class="card">
+                <h2>🔧 Phí Quản Lý</h2>
+                <div class="form-group">
+                    <label>Số tiền (VNĐ)</label>
+                    <input type="number" id="mgmtFee" value="150000" oninput="calculateTotal()">
+                </div>
+            </div>
+
+            <!-- Summary -->
+            <div class="card">
+                <h2>📊 Tổng Hợp</h2>
+                <div class="summary">
+                    <div class="summary-row">
+                        <span>Tiền điện:</span>
+                        <span id="summaryElec">0 ₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Tiền nước:</span>
+                        <span id="summaryWater">0 ₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Phí quản lý:</span>
+                        <span id="summaryMgmt">150,000 ₫</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>TỔNG CỘNG:</span>
+                        <span id="summaryTotal">150,000 ₫</span>
+                    </div>
+                </div>
+                <button class="btn btn-primary" onclick="createInvoice()" id="createBtn">
+                    Tạo Hóa Đơn
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <script>
+        const API_BASE = window.location.origin;
+        let authToken = localStorage.getItem('adminToken');
+
+        // Initialize
+        if (authToken) {
+            document.getElementById('loginCard').style.display = 'none';
+            document.getElementById('mainForm').style.display = 'block';
+            loadApartments();
+            setDefaultDueDate();
+        }
+
+        async function login() {
+            const username = document.getElementById('loginUsername').value;
+            const password = document.getElementById('loginPassword').value;
+
+            if (!username || !password) {
+                showNotification('Vui lòng nhập username và password', 'error');
+                return;
+            }
+
+            try {
+                const response = await fetch(`${API_BASE}/api/Auth/login`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+
+                if (!response.ok) throw new Error('Login failed');
+
+                const data = await response.json();
+                authToken = data.token;
+                localStorage.setItem('adminToken', authToken);
+
+                document.getElementById('loginCard').style.display = 'none';
+                document.getElementById('mainForm').style.display = 'block';
+
+                loadApartments();
+                setDefaultDueDate();
+                showNotification('Đăng nhập thành công!', 'success');
+            } catch (error) {
+                showNotification('Đăng nhập thất bại!', 'error');
+                console.error(error);
+            }
+        }
+
+        function setDefaultDueDate() {
+            const today = new Date();
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+            const dueDate = new Date(year, month - 1, 20);
+            document.getElementById('dueDate').valueAsDate = dueDate;
+
+            // Set current month
+            document.getElementById('month').value = today.getMonth() + 1;
+        }
+
+        async function loadApartments() {
+            try {
+                const response = await fetch(`${API_BASE}/api/Apartments`, {
+                    headers: { 'Authorization': `Bearer ${authToken}` }
+                });
+
+                if (!response.ok) throw new Error('Failed to load apartments');
+
+                const data = await response.json();
+                const select = document.getElementById('apartment');
+                select.innerHTML = '<option value="">-- Chọn căn hộ --</option>';
+
+                data.items.forEach(apt => {
+                    const option = document.createElement('option');
+                    option.value = apt.id;
+                    option.textContent = `${apt.code} - Tòa ${apt.building} - Tầng ${apt.floor}`;
+                    option.dataset.info = JSON.stringify(apt);
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                showNotification('Không tải được danh sách căn hộ', 'error');
+                console.error(error);
+            }
+        }
+
+        function loadApartmentInfo() {
+            const select = document.getElementById('apartment');
+            const option = select.options[select.selectedIndex];
+            const info = document.getElementById('apartmentInfo');
+
+            if (option.dataset.info) {
+                const apt = JSON.parse(option.dataset.info);
+                info.innerHTML = `<strong>Thông tin:</strong> ${apt.code} | Tòa ${apt.building} | Tầng ${apt.floor} | Diện tích: ${apt.areaM2}m²`;
+                info.style.display = 'block';
+            } else {
+                info.style.display = 'none';
+            }
+        }
+
+        function calculateElec() {
+            const oldVal = parseFloat(document.getElementById('elecOld').value) || 0;
+            const newVal = parseFloat(document.getElementById('elecNew').value) || 0;
+            const price = parseFloat(document.getElementById('elecPrice').value) || 0;
+
+            const usage = Math.max(0, newVal - oldVal);
+            const amount = usage * price;
+
+            document.getElementById('elecUsage').value = usage;
+            document.getElementById('elecAmount').value = formatMoney(amount);
+
+            calculateTotal();
+        }
+
+        function calculateWater() {
+            const oldVal = parseFloat(document.getElementById('waterOld').value) || 0;
+            const newVal = parseFloat(document.getElementById('waterNew').value) || 0;
+            const price = parseFloat(document.getElementById('waterPrice').value) || 0;
+
+            const usage = Math.max(0, newVal - oldVal);
+            const amount = usage * price;
+
+            document.getElementById('waterUsage').value = usage;
+            document.getElementById('waterAmount').value = formatMoney(amount);
+
+            calculateTotal();
+        }
+
+        function calculateTotal() {
+            const elecAmount = parseMoneyInput(document.getElementById('elecAmount').value);
+            const waterAmount = parseMoneyInput(document.getElementById('waterAmount').value);
+            const mgmtFee = parseFloat(document.getElementById('mgmtFee').value) || 0;
+
+            const total = elecAmount + waterAmount + mgmtFee;
+
+            document.getElementById('summaryElec').textContent = formatMoney(elecAmount);
+            document.getElementById('summaryWater').textContent = formatMoney(waterAmount);
+            document.getElementById('summaryMgmt').textContent = formatMoney(mgmtFee);
+            document.getElementById('summaryTotal').textContent = formatMoney(total);
+        }
+
+        async function createInvoice() {
+            const apartmentId = document.getElementById('apartment').value;
+            if (!apartmentId) {
+                showNotification('Vui lòng chọn căn hộ', 'error');
+                return;
+            }
+
+            const month = parseInt(document.getElementById('month').value);
+            const year = parseInt(document.getElementById('year').value);
+            const dueDate = document.getElementById('dueDate').value;
+
+            const elecUsage = parseFloat(document.getElementById('elecUsage').value) || 0;
+            const elecPrice = parseFloat(document.getElementById('elecPrice').value) || 0;
+            const elecAmount = elecUsage * elecPrice;
+
+            const waterUsage = parseFloat(document.getElementById('waterUsage').value) || 0;
+            const waterPrice = parseFloat(document.getElementById('waterPrice').value) || 0;
+            const waterAmount = waterUsage * waterPrice;
+
+            const mgmtFee = parseFloat(document.getElementById('mgmtFee').value) || 0;
+
+            const lines = [];
+
+            if (elecAmount > 0) {
+                lines.push({
+                    feeName: 'Tiền điện',
+                    description: `Điện tháng ${month}/${year} (${elecUsage} kWh × ${formatMoney(elecPrice)}/kWh)`,
+                    amount: elecAmount,
+                    quantity: elecUsage,
+                    unitPrice: elecPrice
+                });
+            }
+
+            if (waterAmount > 0) {
+                lines.push({
+                    feeName: 'Tiền nước',
+                    description: `Nước tháng ${month}/${year} (${waterUsage} m³ × ${formatMoney(waterPrice)}/m³)`,
+                    amount: waterAmount,
+                    quantity: waterUsage,
+                    unitPrice: waterPrice
+                });
+            }
+
+            if (mgmtFee > 0) {
+                lines.push({
+                    feeName: 'Phí quản lý',
+                    description: `Phí quản lý chung cư tháng ${month}/${year}`,
+                    amount: mgmtFee,
+                    quantity: 1,
+                    unitPrice: mgmtFee
+                });
+            }
+
+            if (lines.length === 0) {
+                showNotification('Chưa có khoản phí nào!', 'error');
+                return;
+            }
+
+            const invoice = {
+                apartmentId,
+                type: 'Monthly',
+                month,
+                year,
+                dueDate,
+                lines
+            };
+
+            const btn = document.getElementById('createBtn');
+            btn.disabled = true;
+            btn.innerHTML = '<span class="loading"></span> Đang tạo hóa đơn...';
+
+            try {
+                const response = await fetch(`${API_BASE}/api/Invoices`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${authToken}`
+                    },
+                    body: JSON.stringify(invoice)
+                });
+
+                if (!response.ok) {
+                    const errorData = await response.json();
+                    throw new Error(errorData.message || 'Failed to create invoice');
+                }
+
+                const data = await response.json();
+                showNotification('✅ Tạo hóa đơn thành công!', 'success');
+
+                // Reset form
+                setTimeout(() => {
+                    resetForm();
+                }, 2000);
+
+            } catch (error) {
+                showNotification('❌ Tạo hóa đơn thất bại: ' + error.message, 'error');
+                console.error(error);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Tạo Hóa Đơn';
+            }
+        }
+
+        function resetForm() {
+            document.getElementById('elecOld').value = 0;
+            document.getElementById('elecNew').value = 0;
+            document.getElementById('waterOld').value = 0;
+            document.getElementById('waterNew').value = 0;
+            calculateElec();
+            calculateWater();
+        }
+
+        function formatMoney(value) {
+            return new Intl.NumberFormat('vi-VN', {
+                style: 'currency',
+                currency: 'VND'
+            }).format(value);
+        }
+
+        function parseMoneyInput(str) {
+            return parseFloat(str.replace(/[^\d]/g, '')) || 0;
+        }
+
+        function showNotification(message, type) {
+            const notif = document.getElementById('notification');
+            notif.textContent = message;
+            notif.className = `notification ${type} show`;
+
+            setTimeout(() => {
+                notif.classList.remove('show');
+            }, 4000);
+        }
+    </script>
+</body>
+
+</html>

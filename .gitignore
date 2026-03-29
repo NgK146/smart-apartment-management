@@ -1,0 +1,56 @@
+# =====================
+# GENERAL
+# =====================
+*.log
+*.tmp
+*.swp
+.DS_Store
+.env
+
+# =====================
+# IDE
+# =====================
+.idea/
+.vscode/
+.vs/
+*.iml
+
+# =====================
+# FLUTTER / DART
+# =====================
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
+
+# =====================
+# ANDROID / IOS BUILD
+# =====================
+android/app/debug
+android/app/profile
+android/app/release
+ios/Flutter/.last_build_id
+
+# =====================
+# .NET / BACKEND
+# =====================
+bin/
+obj/
+**/bin/
+**/obj/
+
+# =====================
+# SECRETS / CONFIG
+# =====================
+.env
+appsettings.json
+*.keystore
+*.jks
+
+# =====================
+# OPTIONAL (if you don't need docs)
+# =====================
+**/doc/api/

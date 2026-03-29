@@ -1,0 +1,16 @@
+{
+    "name": "icitizen-blockchain",
+    "version": "1.0.0",
+    "description": "Payment transparency blockchain",
+    "scripts": {
+        "compile": "truffle compile",
+        "migrate": "truffle migrate",
+        "test": "truffle test"
+    },
+    "dependencies": {
+        "@openzeppelin/contracts": "^5.0.0"
+    },
+    "devDependencies": {
+        "truffle": "^5.11.0"
+    }
+}
